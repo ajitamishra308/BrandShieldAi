@@ -1,0 +1,15 @@
+# dependencies and builds
+node_modules/
+dist/
+.venv/
+__pycache__/
+*.pyc
+
+# secrets: never commit real keys
+.env
+.env.*
+!.env.example
+
+# editor / OS
+.vscode/
+.DS_Store
