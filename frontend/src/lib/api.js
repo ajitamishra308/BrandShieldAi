@@ -20,3 +20,7 @@ export async function apiFetch(path, { token, method = 'GET', body, signal } = {
 }
 
 export const getHealth = (signal) => apiFetch('/health', { signal })
+
+// Reviews an item (and the other items of its campaign) and stores the findings.
+export const reviewItem = (itemId, token) => apiFetch(`/review/item/${itemId}`, { method: 'POST', token })
+export const reviewCampaign = (campaignId, token) => apiFetch(`/review/campaign/${campaignId}`, { method: 'POST', token })

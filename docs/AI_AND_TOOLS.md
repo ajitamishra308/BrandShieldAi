@@ -10,7 +10,8 @@ This file is kept up to date as the project grows.
 
 ## AI used inside the product
 
-- **Google Gemini API (free tier)**: planned for claim analysis and suggested wording. Not connected yet. Only fictional sample data is ever sent to it. Free-tier data may be used by the provider to improve its products, so no confidential data is sent.
+- **Stage 2 contains no AI at runtime.** The review engine is plain, tested code (rules, number and date matching, comparison with approved facts).
+- **Google Gemini API (free tier)**: planned for claims the rules cannot judge. Not connected yet. Only fictional sample data is ever sent to it. Free-tier data may be used by the provider to improve its products, so no confidential data is sent.
 - The AI never publishes, approves or edits anything on its own. Findings without a valid cited source are shown as "Needs human check".
 
 ## Libraries and services

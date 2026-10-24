@@ -18,13 +18,46 @@ def _headers() -> dict[str, str]:
     return headers
 
 
-async def select(table: str, params: dict[str, str] | None = None) -> list[dict]:
-    async with httpx.AsyncClient(timeout=10) as client:
-        response = await client.get(
-            f"{settings.supabase_url}/rest/v1/{table}", headers=_headers(), params=params or {}
+async def _request(
+    method: str,
+    table: str,
+    *,
+    params: dict[str, str] | None = None,
+    json: list[dict] | dict | None = None,
+    prefer: str | None = None,
+) -> list[dict]:
+    headers = _headers()
+    if json is not None:
+        headers["Content-Type"] = "application/json"
+    if prefer:
+        headers["Prefer"] = prefer
+    async with httpx.AsyncClient(timeout=20) as client:
+        response = await client.request(
+            method,
+            f"{settings.supabase_url}/rest/v1/{table}",
+            headers=headers,
+            params=params or {},
+            json=json,
         )
         response.raise_for_status()
-        return response.json()
+        return response.json() if response.content else []
+
+
+async def select(table: str, params: dict[str, str] | None = None) -> list[dict]:
+    return await _request("GET", table, params=params)
+
+
+async def insert(table: str, rows: list[dict]) -> None:
+    if rows:
+        await _request("POST", table, json=rows, prefer="return=minimal")
+
+
+async def delete(table: str, params: dict[str, str]) -> None:
+    await _request("DELETE", table, params=params, prefer="return=minimal")
+
+
+async def patch(table: str, params: dict[str, str], data: dict) -> None:
+    await _request("PATCH", table, params=params, json=data, prefer="return=minimal")
 
 
 async def ping() -> bool:
